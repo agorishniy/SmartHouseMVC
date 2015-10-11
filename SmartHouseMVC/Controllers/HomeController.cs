@@ -16,6 +16,108 @@ namespace SmartHouseMVC.Controllers
         {
             return View(GetListDevice(new ModelContext()));
         }
+
+        public PartialViewResult AjaxOnOff(int id, string sType)
+        {
+            ModelContext db = new ModelContext();
+            IDevice dev = new Device();
+
+            switch (sType)
+            {
+                case "Lamp":
+                    db.Lamps.Find(id).OnOff();
+                    dev = db.Lamps.Find(id);
+                    break;
+                case "Fan":
+                    db.Fans.Find(id).OnOff();
+                    dev = db.Fans.Include("Speed").FirstOrDefault(p => p.Id == id);
+                    break;
+                case "Louvers":
+                    db.LouversSet.Find(id).OnOff();
+                    dev = db.LouversSet.Include("Open").FirstOrDefault(p => p.Id == id);
+                    break;
+                case "Tv":
+                    db.TvSet.Find(id).OnOff();
+                    dev = db.TvSet.Include("Volume").FirstOrDefault(p => p.Id == id);
+                    break;
+            }
+            db.SaveChanges();
+
+            return PartialView("DivDevice", dev);
+        }
+
+
+        public PartialViewResult AjaxDown(int id, string sType, string sParam)
+        {
+            ModelContext db = new ModelContext();
+            IDevice dev = new Device();
+
+            switch (sType)
+            {
+                case "Fan":
+                    dev = db.Fans.Include("Speed").FirstOrDefault(p => p.Id == id);
+                    ((Fan)dev).Speed.Down();
+                    break;
+                case "Louvers":
+                    dev = db.LouversSet.Include("Open").FirstOrDefault(p => p.Id == id);
+                    ((Louvers)dev).Open.Down();
+                    break;
+                case "Tv":
+                    dev = db.TvSet.Include("Volume").FirstOrDefault(p => p.Id == id);
+                    switch (sParam)
+                    {
+                        case "Volume":
+                            ((Tv)dev).Volume.Down();
+                            break;
+                        case "Program":
+                            ((Tv)dev).PreviousChannel();
+                            break;
+                    }
+                    break;
+            }
+            db.Entry(dev).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return PartialView("DivDevice", dev);
+        }
+
+
+        public PartialViewResult AjaxUp(int id, string sType, string sParam)
+        {
+            ModelContext db = new ModelContext();
+            IDevice dev = new Device();
+
+            switch (sType)
+            {
+                case "Fan":
+                    dev = db.Fans.Include("Speed").FirstOrDefault(p => p.Id == id);
+                    ((Fan)dev).Speed.Up();
+                    break;
+                case "Louvers":
+                    dev = db.LouversSet.Include("Open").FirstOrDefault(p => p.Id == id);
+                    ((Louvers)dev).Open.Up();
+                    break;
+                case "Tv":
+                    dev = db.TvSet.Include("Volume").FirstOrDefault(p => p.Id == id);
+                    switch (sParam)
+                    {
+                        case "Volume":
+                            ((Tv)dev).Volume.Up();
+                            break;
+                        case "Program":
+                            ((Tv)dev).NextChannel();
+                            break;
+                    }
+                    break;
+            }
+            db.Entry(dev).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return PartialView("DivDevice", dev);
+        }
+
+
+        
         public ActionResult Add(string sName, string sType)
         {
             ModelContext db = new ModelContext();
@@ -64,101 +166,6 @@ namespace SmartHouseMVC.Controllers
             return View("Index", GetListDevice(db));
         }
 
-        public ActionResult OnOff(int id, string sType)
-        {
-            ModelContext db = new ModelContext();
-
-            switch (sType)
-            {
-                case "Lamp":
-                    db.Lamps.Find(id).OnOff();
-                    break;
-                case "Fan":
-                    db.Fans.Find(id).OnOff();
-                    break;
-                case "Louvers":
-                    db.LouversSet.Find(id).OnOff();
-                    break;
-                case "Tv":
-                    db.TvSet.Find(id).OnOff();
-                    break;
-            }
-            db.SaveChanges();
-
-            return View("Index", GetListDevice(db));
-        }
-
-        public ActionResult Down(int id, string sType, string sParam)
-        {
-            ModelContext db = new ModelContext();
-            //IDevice d;
-
-            switch (sType)
-            {
-                case "Fan":
-                    Fan fan = db.Fans.Include("Speed").FirstOrDefault(p => p.Id == id);
-                    fan.Speed.Down();
-                    db.Entry(fan).State = EntityState.Modified;
-                    break;
-                case "Louvers":
-                    Louvers louvers = db.LouversSet.Include("Open").FirstOrDefault(p => p.Id == id);
-                    louvers.Open.Down();
-                    db.Entry(louvers).State = EntityState.Modified;
-                    break;
-                case "Tv":
-                    switch (sParam)
-                    {
-                        case "Volume":
-                            Tv tv = db.TvSet.Include("Volume").FirstOrDefault(p => p.Id == id);
-                            tv.Volume.Down();
-                            db.Entry(tv).State = EntityState.Modified;
-                            break;
-                        case "Program":
-                            db.TvSet.Find(id).PreviousChannel();
-                            break;
-                    }
-                    break;
-            }
-            db.SaveChanges();
-
-            return View("Index", GetListDevice(db));
-        }
-
-        public ActionResult Up(int id, string sType, string sParam)
-        {
-            ModelContext db = new ModelContext();
-            //IDevice d;
-
-            switch (sType)
-            {
-                case "Fan":
-                    Fan fan = db.Fans.Include("Speed").FirstOrDefault(p => p.Id == id);
-                    fan.Speed.Up();
-                    db.Entry(fan).State = EntityState.Modified;
-                    break;
-                case "Louvers":
-                    Louvers louvers = db.LouversSet.Include("Open").FirstOrDefault(p => p.Id == id);
-                    louvers.Open.Up();
-                    db.Entry(louvers).State = EntityState.Modified;
-                    break;
-                case "Tv":
-                    switch (sParam)
-                    {
-                        case "Volume":
-                            Tv tv = db.TvSet.Include("Volume").FirstOrDefault(p => p.Id == id);
-                            tv.Volume.Up();
-                            db.Entry(tv).State = EntityState.Modified;
-                            break;
-                        case "Program":
-                            db.TvSet.Find(id).NextChannel();
-                            break;
-                    }
-                    break;
-            }
-            db.SaveChanges();
-
-            return View("Index", GetListDevice(db));
-        }
 
         public static List<IDevice> GetListDevice(ModelContext db)    
         {
