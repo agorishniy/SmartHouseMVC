@@ -7,6 +7,12 @@
 	font-style: normal;
 }
 
+.clearfix:after{
+    content: '';
+    display: table;
+    clear: both;
+    width: 100%;
+}
 
 body{
 	font: 10px Conv, sans-serif; 
@@ -183,18 +189,11 @@ p{
     color: #2e3192;
     display: inline-block;
     vertical-align: middle;
-    max-width: 98px;
+    max-width: 96px;
     overflow-wrap: break-word;
 }
 
 .device-status-btn-del{
-/*    position: absolute;*/
-    right: 100%;
-    top: 5px;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    vertical-align: top;
     float: right; 
 }
 
@@ -231,7 +230,7 @@ p{
 
 
 .device-div-speed-left{
-	display: inline-block;
+    float: left;
     vertical-align: middle;
     height: 100%;
     width: 20%;
@@ -239,17 +238,43 @@ p{
 }
 
 .device-div-speed-right{
-	display: inline-block;
+    float: right;
     vertical-align: middle;
     height: 100%;
     width: 78%;
     text-align: right;
 }
 
+.div-status-block {
+    display: table;
+    width: 95%;
+    background: rgba(255, 255, 255, 0.4);
+    -webkit-filter: drop-shadow(2px 2px 4px rgba(46,49,146,0.5));
+    border-radius: 4px;
+    padding: 2px 2px 4px 5px;
+    margin: 5px 0 0 0;
+}
 
+.div-param-text{
+    display: table-cell;
+    vertical-align: middle;
+}
+.div-param-btn{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.div-param-btn-prog{
+    width: 35%;
+}
+
+.btn-down, .btn-up{
+    display: inline-block;
+}
 
 .device-div-open-left{
-	display: inline-block;
+    float: left;
     vertical-align: middle;
     height: 100%;
     width: 60%;
@@ -257,6 +282,7 @@ p{
 }
 
 .device-div-open-right{
+    float: right;
 	display: inline-block;
     vertical-align: middle;
     height: 100%;
@@ -309,6 +335,8 @@ p{
 }
 
 .device-div-prog-state{
+    display: block;
+    margin: 0 auto;
     height: 20px;
     max-width: 80px;
 }

@@ -11,7 +11,7 @@
 </div>
 
 @*State of device*@
-<div class="device-div-on-off">
+<div class="device-div-on-off div-state">
     @if (Model.State == true)
     {
         <span class="device-state">State: ON</span>
@@ -57,11 +57,11 @@
 {
     if (Model is IDevSpeed)
     {
-        <div class="device-div-on-off">
-            <div class="device-div-speed-left">
+        <div class="div-status-block div-speed">
+            <div class="div-param-text">
                 <span class="device-status-name">Speed</span>
             </div>
-            <div class="device-div-speed-right">
+            <div class="div-param-btn">
                 <a class="btn-down" href="" data-id="@Model.Id" data-type="@sType" data-param="Speed">
                     <img class="device-div-speed-img" src="../Content/images/btn_down.png" />
                 </a>
@@ -75,11 +75,11 @@
 
     if (Model is IDevVolume)
     {
-        <div class="device-div-on-off">
-            <div class="device-div-speed-left">
+        <div class="div-status-block div-volume">
+            <div class="div-param-text">
                 <span class="device-status-name">Volume</span>
             </div>
-            <div class="device-div-speed-right">
+            <div class="div-param-btn">
                 <a class="btn-down" href="" data-id="@Model.Id" data-type="@sType" data-param="Volume">
                     <img class="device-div-speed-img" src="../Content/images/btn_down.png" />
                 </a>
@@ -93,11 +93,11 @@
 
     if (Model is IDevOpen)
     {
-        <div class="device-div-on-off">
-            <div class="device-div-open-left">
+        <div class="div-status-block div-open">
+            <div class="div-param-text">
                 <span class="device-status-name">Open: @Html.Raw((50 * ((Louvers)Model).Open.Value).ToString())%</span>
             </div>
-            <div class="device-div-open-right">
+            <div class="div-param-btn">
                 <a class="btn-down" href="" data-id="@Model.Id" data-type="@sType" data-param="Open">
                     <img class="device-div-speed-img" src="../Content/images/btn_down.png" />
                 </a>
@@ -110,12 +110,12 @@
 
     if (Model is Tv)
     {
-        <div class="device-div-on-off">
-            <div class="device-div-speed-left">
+        <div class="div-status-block div-program">
+            <div class="div-param-text">
                 <span class="device-status-name">Program</span>
                 <img class="device-div-prog-state" src="../Content/images/icon_@Html.Raw(((Tv)Model).Channel.ToString() + ".png")" />
             </div>
-            <div class="device-div-speed-right">
+            <div class="div-param-btn div-param-btn-prog">
                 <a class="btn-down" href="" data-id="@Model.Id" data-type="@sType" data-param="Program">
                     <img class="device-div-speed-img" src="../Content/images/btn_down.png" />
                 </a>
